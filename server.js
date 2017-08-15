@@ -48,7 +48,9 @@ app.post('/users', (req, res) => {
     res.status(400).send(e);
   })
 });
-
+app.post('user/login', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password']);
+})
 // var authenticate = (req, res, next) => {
 //   var token = req.header('x-auth');
 //
