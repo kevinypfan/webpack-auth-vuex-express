@@ -22,8 +22,7 @@ new Vue({
     store,
     router,
     created(){
-      // var asd = window.localStorage.getItem("x-auth");
-      // console.log(asd);
+      
     },
   render: h => h(App)
 })

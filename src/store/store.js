@@ -51,6 +51,13 @@ export const store = new Vuex.Store({
           },(error)=>{
 
           });
+        },
+        getToken ({commit}, payload) {
+          Vue.http.get('/users/me', {'headers': {'x-auth': payload }}).then((res) => {
+            commit('setUser', res.body);
+            let token = res.headers.get('x-auth');
+            
+          })
         }
     }
 })
