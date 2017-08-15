@@ -19,7 +19,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-        <router-link v-for="item in menuItems" :to="item.link" tag="li" activeClass="active">
+        <router-link v-for="item in menuItems" :to="item.link" tag="li" activeClass="active" :key="item.title">
             <a href="#">{{item.title}}</a>
         </router-link>
       </ul>
@@ -44,7 +44,8 @@ export default {
         menuItems = [
           {title: 'Posts', link: '/posts'},
           {title: 'Chat', link: '/chat'},
-          {title: 'Profile', link: '/Profile'}
+          {title: 'Profile', link: '/profile'},
+          {title: 'Logout', link: '/logout'}
         ]
       }
       return menuItems

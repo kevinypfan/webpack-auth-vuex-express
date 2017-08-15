@@ -20,27 +20,37 @@ export const store = new Vuex.Store({
     actions:{
         //註冊
         signUserUp({commit}, payload){
-          Vue.http.post('http://59.126.93.93:8000/users',payload).then((res)=>{
+          Vue.http.post('/users',payload).then((res)=>{
 
             console.log(res)
-            commit('setUser', res.body.email);
-            // let token = res.headers.map['x-auth'][0];
-            // localStorage.setItem('x-auth', token);
+            commit('setUser', res.body);
+            let token = res.headers.map['x-auth'][0];
+            localStorage.setItem('x-auth', token);
           },(error)=>{
 
           })
           // commit('setUser', payload.email)
         },
         userLogin({commit}, payload){
-          Vue.http.post('http://59.126.93.93:8000/login',payload).then((res)=>{
+          Vue.http.post('/user/login',payload).then((res)=>{
 
             console.log(res)
-            commit('setUser', res.body.email);
-            // let token = res.headers.map['x-auth'][0];
-            // localStorage.setItem('x-auth', token);
+            commit('setUser', res.body);
+            let token = res.headers.get('x-auth');
+            localStorage.setItem('x-auth', token);
           },(error)=>{
 
           })
+        },
+        userLogout ({commit},payload) {
+
+          Vue.http.delete('/users/me/token',{'headers':{'x-auth': payload['x-auth'] }}).then((res)=>{
+            console.log(payload);
+            commit('setUser', null);
+            localStorage.removeItem('x-auth');
+          },(error)=>{
+
+          });
         }
     }
 })
