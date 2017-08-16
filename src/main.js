@@ -22,7 +22,12 @@ new Vue({
     store,
     router,
     created(){
-      
+      var token = window.localStorage.getItem("x-auth");
+      this.$store.dispatch('getToken', token ).then((res)=>{
+        this.$router.push('/');
+      }).catch(err=>{
+        this.$router.push('/login');
+      });
     },
   render: h => h(App)
 })

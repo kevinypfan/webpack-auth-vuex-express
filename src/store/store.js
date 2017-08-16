@@ -33,8 +33,6 @@ export const store = new Vuex.Store({
         },
         userLogin({commit}, payload){
           Vue.http.post('/user/login',payload).then((res)=>{
-
-            console.log(res)
             commit('setUser', res.body);
             let token = res.headers.get('x-auth');
             localStorage.setItem('x-auth', token);
@@ -43,22 +41,21 @@ export const store = new Vuex.Store({
           })
         },
         userLogout ({commit},payload) {
-
           Vue.http.delete('/users/me/token',{'headers':{'x-auth': payload['x-auth'] }}).then((res)=>{
             console.log(payload);
             commit('setUser', null);
             localStorage.removeItem('x-auth');
           },(error)=>{
-
           });
         },
         getToken ({commit}, payload) {
-          Vue.http.get('/users/me', {'headers': {'x-auth': payload }}).then((res) => {
-            commit('setUser', res.body);
-            let token = res.headers.get('x-auth');
-          }).catch((err) => {
-            localStorage.removeItem('x-auth');
-            commit('setUser', null);
+          return new Promise((resolve, reject) => {
+            Vue.http.get('/users/me', {'headers': {'x-auth': payload }}).then((res) => {
+              commit('setUser', res.body);
+              resolve();
+            }).catch(()=>{
+              reject();
+            })
           })
         }
     }

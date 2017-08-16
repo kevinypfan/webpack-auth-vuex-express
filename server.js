@@ -45,12 +45,13 @@ app.post('/users', (req, res) => {
   }).then((token)=>{
     res.header('x-auth', token).send(user);
   }).catch((e) => {
-    res.status(400).send(e);
+    console.log(e.errors['password'].message)
+    res.status(400).send(e.errors['password'].message);
   })
 });
 app.post('/user/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
-  console.log(body);
+  // console.log(body);
   User.findByCredentials(body.email, body.password).then((user) => {
       return user.generateAuthToken().then((token) => {
         res.header('x-auth', token).send(user);

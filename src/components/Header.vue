@@ -16,6 +16,7 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <p class="navbar-text" v-if="userIsAuthenticated">{{user.userNickname}}</p>
       <ul class="nav navbar-nav navbar-right">
         <router-link v-for="item in menuItems" :to="item.link" tag="li" activeClass="active" :key="item.title">
             <a href="#">{{item.title}}</a>
@@ -50,6 +51,9 @@ export default {
     },
     userIsAuthenticated () {
         return this.$store.getters.getUser !== null && this.$store.getters.getUser !== undefined
+    },
+    user(){
+      return this.$store.getters.getUser
     }
   }
 }
