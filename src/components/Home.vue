@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Home Page</h1>
-    <h1 v-if="">{{user.email}}</h1>
+    <!-- <h1 v-if="">{{user.email}}</h1> -->
   </div>
 
 </template>
@@ -14,22 +14,29 @@ export default {
     }
   },
   computed: {
-    user () {
-      return this.$store.getters.getUser
+    // user () {
+    //   return this.$store.getters.getUser
+    // },
+    userIsAuthenticated () {
+        return this.$store.getters.getUser !== null && this.$store.getters.getUser !== undefined
     }
   },
   watch: {
-    user (value) {
-      if (value == null || value == undefined) {
-        this.$router.push('/login')
+    userIsAuthenticated (value) {
+      if (value) {
+        this.$router.push('/');
+      } else {
+        this.$router.push('/login');
       }
     }
   },
   created () {
     var token = window.localStorage.getItem("x-auth");
-    if (token !== null || token !== undefined) {
-      this.$store.dispatch('getToken', token);
-    }
+    this.$store.dispatch('getToken', token);
+    // var token = window.localStorage.getItem("x-auth");
+    // if (token == null) {
+    //   this.$router.push('/login');
+    // }
   }
 }
 </script>

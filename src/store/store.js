@@ -24,7 +24,7 @@ export const store = new Vuex.Store({
 
             console.log(res)
             commit('setUser', res.body);
-            let token = res.headers.map['x-auth'][0];
+            let token = res.headers.get('x-auth');
             localStorage.setItem('x-auth', token);
           },(error)=>{
 
@@ -56,7 +56,9 @@ export const store = new Vuex.Store({
           Vue.http.get('/users/me', {'headers': {'x-auth': payload }}).then((res) => {
             commit('setUser', res.body);
             let token = res.headers.get('x-auth');
-            
+          }).catch((err) => {
+            localStorage.removeItem('x-auth');
+            commit('setUser', null);
           })
         }
     }

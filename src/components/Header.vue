@@ -12,8 +12,6 @@
       <router-link to="/">
           <a class="navbar-brand" href="#">Brand</a>
       </router-link>
-
-
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
