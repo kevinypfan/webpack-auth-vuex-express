@@ -43,6 +43,7 @@ export default {
         menuItems = [
           {title: 'Chat', link: '/chat'},
           {title: 'Personal', link: '/personal'},
+          {title: 'New Post', link: '/newpost'},
           {title: 'Logout', link: '/logout'}
         ]
       }

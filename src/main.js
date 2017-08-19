@@ -15,16 +15,19 @@ const router = new VueRouter({
     routes
 });
 
-// router.beforeEach((to, from, next) => {
-//   var token = window.localStorage.getItem("x-auth");
-//   console.log('to=', to.fullPath, '| from=', from.fullPath,'| token=', token);
-//   // if (token == null) {
-//   //   next('/login');
-//   // }
-//   next();
-//
-//
-// })
+router.beforeEach((to, from, next) => {
+  var token = window.localStorage.getItem("x-auth");
+  console.log('to=', to.fullPath, '| from=', from.fullPath,'| token=', token,'| store=',store.state.user);
+   if (to.matched.some(record => record.meta.requiresAuth)) {
+     if (!token) {
+       next('/login');
+     } else {
+       next();
+     }
+    } else {
+      next();
+    }
+})
 
 var vm = new Vue({
   el: '#app',

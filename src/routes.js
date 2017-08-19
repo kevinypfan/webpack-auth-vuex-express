@@ -6,6 +6,7 @@ import Logout from './components/user/Logout.vue'
 import Post from './components/posts/Post.vue'
 import Chat from './components/chat/Chat.vue'
 import Personal from './components/personal/Personal.vue'
+import NewPost from './components/newPost/NewPost.vue'
 
 
 export const routes = [
@@ -13,15 +14,16 @@ export const routes = [
     path:'/',
     component: Home,
     name: 'home',
-    beforeEnter: (to, from, next) => {
-        var token = window.localStorage.getItem("x-auth");
-        console.log('to=', to.fullPath, '| from=', from.fullPath,'| token=', token);
-      if (!token) {
-        next('/login')
-      } else {
-        next()
-      }
-    },
+    meta: { requiresAuth: true },
+    // beforeEnter: (to, from, next) => {
+    //     var token = window.localStorage.getItem("x-auth");
+    //     console.log('to=', to.fullPath, '| from=', from.fullPath,'| token=', token);
+    //   if (!token) {
+    //     next('/login')
+    //   } else {
+    //     next()
+    //   }
+    // },
     children: [
       {
         path: '',
@@ -37,12 +39,16 @@ export const routes = [
         path: 'personal',
         name: 'personal',
         component: Personal
+      },
+      {
+        path: 'newpost',
+        name: 'newpost',
+        component: NewPost
       }
     ]
   },
-  {path: '/personal' , name: 'personal', component: Personal},
   {path: '/login' , name: 'login', component: Login},
   {path: '/signup' , name: 'signup', component: Signup},
   {path: '/logout' , name: 'logout', component: Logout},
-  { path: '/*', redirect: '/home'}
+  { path: '/*', redirect: '/login'}
 ]
