@@ -22,10 +22,14 @@ app.all('/*', function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
   next();
 });
-
-app.post('/posts', (req, res) => {
-  var body = _.pick(req.body, ['user','userImg', 'postTitle', 'postImg']);
-  var post = new Post(body);
+//發文
+app.post('/posts', authenticate, (req, res) => {
+  // var body = _.pick(req.body, ['postTitle', 'postImg']);
+  var post = new Post({
+    _created: req.user._id,
+    postTitle: req.body.postTitle,
+    postImg: req.body.postImg
+  });
   console.log(post)
   post.save().then((post) => {
     res.send(post);
@@ -33,7 +37,43 @@ app.post('/posts', (req, res) => {
     res.status(400).send(e);
   })
 });
-// POST /users
+//拿全部文章
+app.get('/getAllPosts', authenticate, (req, res) => {
+  Post.find().then(posts => {
+    res.send(posts)
+  }).catch(e => {
+    res.status(400).send(e)
+  })
+});
+//發送留言
+app.post('/sendMessage', authenticate, (req, res) => {
+  var _id = req.body._id;
+  var email = req.user.email;
+  var userNickname = req.user.userNickname
+  var message = req.body.message;
+  var userImg = req.user.userImg;
+  // res.send({email,userNickname,message,userImg});
+  Post.findOne({_id}).then((post) => {
+
+    return post.sendMessage({email,userNickname,message,userImg});
+  }).then((post) => {
+    res.send(post);
+  }).catch((e) => {
+    res.status(400).send(e)
+  })
+
+});
+//我的貼文
+app.get('/myPosts', authenticate, (req, res) => {
+  var _created = req.user._id;
+  Post.find({_created}).then(data => {
+    res.send(data)
+  }).catch((e) => {
+    res.status(400).send(e)
+  })
+})
+
+//註冊會員
 app.post('/users', (req, res) => {
   var body = _.pick(req.body, ['email', 'password','userNickname']);
   var user = new User(body);
@@ -49,6 +89,8 @@ app.post('/users', (req, res) => {
     res.status(400).send(e.errors['password'].message);
   })
 });
+
+//登入會員
 app.post('/user/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   // console.log(body);
@@ -57,6 +99,7 @@ app.post('/user/login', (req, res) => {
         res.header('x-auth', token).send(user);
       }).catch((e) => {
         res.status(400),send();
+        console.log(e)
       });
   });
 });
@@ -78,7 +121,7 @@ app.post('/user/login', (req, res) => {
 app.get('/users/me',authenticate, (req,res)=>{
   res.send(req.user);
 })
-
+//登出會員
 app.delete('/users/me/token', authenticate, (req, res) => {
   req.user.removeToken(req.token).then(() => {
     res.status(200).send();

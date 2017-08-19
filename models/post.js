@@ -1,14 +1,8 @@
 var mongoose = require('mongoose');
 
-var Post = mongoose.model('Post', {
-  userImg: {
-    type: String,
-    trim: true,
-    required: true
-  },
-  user:{
-    type: String,
-    trim: true,
+var PostSchema = new mongoose.Schema({
+  _created:{
+    type: mongoose.Schema.Types.ObjectId,
     required: true
   },
   postTitle: {
@@ -24,14 +18,25 @@ var Post = mongoose.model('Post', {
   },
   messages: [
     {
-      user: { type: String, default: null }
-    },
-    {
-      message: { type: String, default: null }
-    },
-    {
-      date: { type: Date, default: null }
-  }]
+      email: { type: String, required: true},
+      message: { type: String, required: true },
+      userNickname: {type: String, required: true },
+      userImg: {type: String, required: true }
+    }
+  ]
 });
+
+PostSchema.methods.sendMessage = function (payload) {
+  var post = this;
+
+  post.messages.push(payload);
+
+  return post.save().then(()=>{
+
+    return post
+  })
+}
+
+var Post = mongoose.model('Post', PostSchema);
 
 module.exports = {Post};

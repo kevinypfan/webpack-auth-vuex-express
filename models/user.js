@@ -94,7 +94,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
 
   return User.findOne({email}).then((user) => {
     if (!user) {
-      return Promise.reject();
+      return Promise.reject("Unable this User");
     }
 
     return new Promise((resolve, reject) => {
@@ -102,7 +102,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
         if (res) {
           resolve(user);
         } else {
-          reject();
+          reject("your password is incorrect");
         }
       });
     });
