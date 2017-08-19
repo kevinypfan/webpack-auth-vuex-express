@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>
-        Loginin
+        Login
     </h1>
     <form @submit.prevent="onLogin">
       <div class="form-group">

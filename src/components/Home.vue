@@ -2,7 +2,9 @@
   <div>
     <h1>Home Page</h1>
     <!-- <h1 v-if="">{{user.email}}</h1> -->
+    <img src="/public/image/logo.png" alt="">
     <pre>{{user}}</pre>
+    <router-view></router-view>
   </div>
 
 </template>
@@ -43,4 +45,8 @@ export default {
 </script>
 
 <style>
+  img {
+    height: 300px;
+    width: 300px;
+  }
 </style>
