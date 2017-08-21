@@ -1,11 +1,12 @@
 <template lang="html">
   <form @submit.prevent="newPost">
+    <VueImgInputer v-model="picValue" theme="light" size="large"></VueImgInputer>
     <div class="form-group">
       <label for="postTitle">Post Title</label>
       <input type="text" class="form-control" id="postTitle" placeholder="Post Title" v-model="postTitle">
     </div>
     <div class="form-group">
-      <label for="exampleInputPassword1">postImg</label>
+      <label for="postImg">postImg</label>
       <input type="text" class="form-control" id="postImg" placeholder="postImg" v-model="postImg">
     </div>
     <button type="submit" class="btn btn-default">Submit</button>
@@ -13,11 +14,13 @@
 </template>
 
 <script>
+import VueImgInputer from 'vue-img-inputer'
 export default {
   data(){
     return {
       postTitle: "",
-      postImg: ""
+      postImg: "",
+      picValue: ""
     }
   },
   methods: {
@@ -27,6 +30,9 @@ export default {
         this.$router.push('/');
       })
     }
+  },
+  components: {
+    VueImgInputer
   }
 }
 </script>

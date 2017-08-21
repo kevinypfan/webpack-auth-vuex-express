@@ -52,8 +52,9 @@ UserSchema.methods.toJSON = function () {
 UserSchema.methods.generateAuthToken = function () {
   var user = this;
   var access = 'auth';
+  // console.log(user._id.toHexString(),'-----',user.id)
   var token = jwt.sign({_id: user._id.toHexString(), access},'abc123').toString();
-
+  // console.log(jwt.sign({_id: user._id.toHexString(), access},'abc123'));
   user.tokens.push({access, token});
 
   return user.save().then(()=>{
@@ -111,10 +112,13 @@ UserSchema.statics.findByCredentials = function (email, password) {
 
 UserSchema.pre('save', function (next) {
   var user = this;
+  // console.log(user.isModified('password'))
   if (user.isModified('password')){
     bcrypt.genSalt(10, (err, salt)=>{
+      // console.log('salt=',salt);
       bcrypt.hash(user.password, salt, (err, hash)=> {
         user.password = hash;
+        // console.log('\n','hash=',hash);
         next();
       });
     });

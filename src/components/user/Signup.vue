@@ -16,18 +16,24 @@
         <label for="exampleInputNickname">Nickname</label>
         <input type="Nickname" class="form-control" id="exampleInputNickname1" placeholder="Nickname" v-model="nickname">
       </div>
+      <div class="form-group">
+        <VueImgInputer v-model="picValue" theme="light" size="small"></VueImgInputer>
+      </div>
+
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
   </div>
 </template>
 
 <script>
+import VueImgInputer from 'vue-img-inputer'
 export default {
   data (){
     return {
       email: "",
       password: "",
-      nickname: ""
+      nickname: "",
+      picValue: ""
     }
   },
   computed: {
@@ -53,6 +59,9 @@ export default {
     // },(err)=>{
     //   this.note = err
     // });
+  },
+  components: {
+    VueImgInputer
   }
 }
 </script>
