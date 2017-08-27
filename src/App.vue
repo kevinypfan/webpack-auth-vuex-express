@@ -4,6 +4,9 @@
         <div class="container">
             <router-view></router-view>
         </div>
+        <div class="lastspace">
+
+        </div>
     </div>
 
 </template>
@@ -19,6 +22,9 @@ export default{
 
 <style>
   .container {
-    width: 600px
+    width: 600px;
+  }
+  .lastspace {
+    height: 150px;
   }
 </style>

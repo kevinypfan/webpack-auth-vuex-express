@@ -1,8 +1,11 @@
 <template lang="html">
-  <pre>{{posts}}</pre>
+  <div>
+    <app-post v-for="p in posts" :post="p"></app-post>
+  </div>
 </template>
 
 <script>
+import Posts from './posts.vue'
 export default {
   data () {
     return {
@@ -14,6 +17,9 @@ export default {
     this.$http.get('/myPosts',{headers: {"x-auth": token}}).then(posts => {
       this.posts = posts.body
     })
+  },
+  components: {
+    appPost: Posts
   }
 }
 </script>
