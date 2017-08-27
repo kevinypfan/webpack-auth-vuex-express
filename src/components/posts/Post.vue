@@ -1,10 +1,11 @@
 <template lang="html">
 <div>
-  <pre>{{posts}}</pre>
+  <app-post v-for="p in posts" :post="p"></app-post>
 </div>
 </template>
 
 <script>
+import Posts from './posts.vue'
 export default {
   data(){
     return {
@@ -19,6 +20,9 @@ export default {
     }).catch(e => {
 
     })
+  },
+  components: {
+    appPost: Posts
   }
 }
 </script>

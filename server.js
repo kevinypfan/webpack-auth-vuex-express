@@ -2,6 +2,9 @@ const _ = require('lodash');
 const fallback = require('express-history-api-fallback');
 const express = require('express');
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const fs = require('fs');
+const moment = require('moment')
 const {ObjectID} = require('mongodb');
 var {User} = require('./models/user');
 var {Post} = require('./models/post');
@@ -22,15 +25,39 @@ app.all('/*', function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
   next();
 });
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+
+    if (!fs.existsSync( `${__dirname}/public/image`)){
+        fs.mkdirSync(`${__dirname}/public/image`);
+    }
+    cb(null,`${__dirname}/public/image`)
+    },
+    filename: function (req, file, cb) {
+      function getFileExtension1(filename) {
+        return (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename)[0] : undefined;
+      }
+      var fileName = getFileExtension1(file.originalname);
+      var date = Date.now()
+      cb(null, `${moment(date).format("YYYYMMDD_HHmmss")}.${fileName}`)
+    }
+  })
+var upload = multer({ storage })
 //發文
-app.post('/posts', authenticate, (req, res) => {
-  // var body = _.pick(req.body, ['postTitle', 'postImg']);
+app.post('/posts', authenticate, upload.single('postImg'), (req, res) => {
+  var pathRegexp = new RegExp("\/.*");
+  var postTitle = req.body.postTitle
+  var postImgPath = req.file.destination.match(pathRegexp)+'/'+req.file.filename
+  var userNickname = req.user.userNickname
+  var userImg = req.user.userImg
   var post = new Post({
     _created: req.user._id,
-    postTitle: req.body.postTitle,
-    postImg: req.body.postImg
+    postTitle,
+    postImg: postImgPath,
+    userNickname,
+    userImg
   });
-  console.log(post)
   post.save().then((post) => {
     res.send(post);
   }).catch((e) => {
@@ -52,9 +79,7 @@ app.post('/sendMessage', authenticate, (req, res) => {
   var userNickname = req.user.userNickname
   var message = req.body.message;
   var userImg = req.user.userImg;
-  // res.send({email,userNickname,message,userImg});
   Post.findOne({_id}).then((post) => {
-
     return post.sendMessage({email,userNickname,message,userImg});
   }).then((post) => {
     res.send(post);

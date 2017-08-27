@@ -5,7 +5,7 @@
             <router-view></router-view>
         </div>
     </div>
-    
+
 </template>
 
 <script>
@@ -13,10 +13,12 @@
 export default{
     components:{
         appHeader: Header
-    } 
+    }
 }
 </script>
 
 <style>
-
+  .container {
+    width: 600px
+  }
 </style>

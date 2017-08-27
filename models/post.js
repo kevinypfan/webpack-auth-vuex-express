@@ -16,6 +16,16 @@ var PostSchema = new mongoose.Schema({
     trim: true,
     default: null
   },
+  userNickname: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  userImg: {
+    type: String,
+    required: true,
+    trim: true
+  },
   messages: [
     {
       email: { type: String, required: true},
