@@ -48,7 +48,7 @@ var upload = multer({ storage })
 app.post('/posts', authenticate, upload.single('postImg'), (req, res) => {
   var pathRegexp = new RegExp("\/.*");
   var postTitle = req.body.postTitle
-  var postImgPath = req.file.destination.match(pathRegexp)+'/'+req.file.filename
+  var postImgPath = `/public/postImg/${req.file.filename}`
   var userNickname = req.user.userNickname
   var userImg = req.user.userImg
   var dateNow = new Date();
@@ -105,9 +105,10 @@ app.get('/myPosts', authenticate, (req, res) => {
 //註冊會員
 app.post('/users', upload.single('userImg'), (req, res) => {
   var userData = JSON.parse(req.body.userData)
+  console.log(req.file);
   var body = _.pick(userData, ['email', 'password','userNickname']);
   var pathRegexp = new RegExp("\/.*");
-  var userImgPath = req.file.destination.match(pathRegexp)+'/'+req.file.filename
+  var userImgPath = `/public/userImg/${req.file.filename}`
   body.userImg = userImgPath
   var user = new User(body);
   //User.findByToken
