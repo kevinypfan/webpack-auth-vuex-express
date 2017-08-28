@@ -3,11 +3,11 @@
     <div class="user">
       <div class="userImg" :style="{'background-image':' url('+post.userImg+')'}"></div>
       <div class="userName"> {{post.userNickname}}
-        <p>40 分鐘前</p>
+        <p>{{timeStamp}}</p>
       </div>
     </div>
     <div class="post">
-      <div class="postTitle">{{post.postTitle}}</div>
+      <div class="postTitle" style="white-space: pre-line">{{post.postTitle}}</div>
       <div class="postImg" :style="{'background-image':' url('+post.postImg+')'}"></div>
     </div>
     <div class="messages" v-for="m in post.messages">
@@ -25,16 +25,18 @@
 
 <script>
 export default {
-  props: ['post']
+  props: ['post'],
+  computed: {
+    timeStamp () {
+      var date = new Date(this.post._creatDate)
+      var time = moment(date).format('M月D日 H:m');
+      return time
+    }
+  }
 }
 </script>
 
-<style lang="css">
-@import url(//fonts.googleapis.com/earlyaccess/notosanstc.css);
-* {
-  font-family: "Noto Sans TC", sans-serif;
-}
-
+<style lang="css" scoped>
 body, html {
   margin: 0;
 }

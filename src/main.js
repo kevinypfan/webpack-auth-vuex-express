@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import App from './App.vue'
 Vue.use(VueResource);
-
 import { store } from './store/store'
 import { routes } from './routes'
 
@@ -17,7 +16,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   var token = window.localStorage.getItem("x-auth");
-  console.log('to=', to.fullPath, '| from=', from.fullPath,'| token=', token,'| store=',store.state.user);
+  // console.log('to=', to.fullPath, '| from=', from.fullPath,'| token=', token,'| store=',store.state.user);
    if (to.matched.some(record => record.meta.requiresAuth)) {
      if (!token) {
        next('/login');

@@ -8,8 +8,7 @@ var PostSchema = new mongoose.Schema({
   postTitle: {
     type: String,
     required: true,
-    minlength: 1,
-    trim: true
+    minlength: 1
   },
   postImg: {
     type: String,
@@ -26,12 +25,18 @@ var PostSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  _creatDate:{
+    type: String,
+    required: true,
+    trim: true
+  },
   messages: [
     {
       email: { type: String, required: true},
       message: { type: String, required: true },
       userNickname: {type: String, required: true },
-      userImg: {type: String, required: true }
+      userImg: {type: String, required: true },
+      _sendDate: {type: String, required: true }
     }
   ]
 });

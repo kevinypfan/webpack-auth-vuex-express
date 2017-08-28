@@ -28,11 +28,11 @@ app.all('/*', function(req, res, next) {
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-
-    if (!fs.existsSync( `${__dirname}/public/image`)){
-        fs.mkdirSync(`${__dirname}/public/image`);
+    // console.log(file)
+    if (!fs.existsSync( `${__dirname}/public/${file.fieldname}`)){
+        fs.mkdirSync(`${__dirname}/public/${file.fieldname}`);
     }
-    cb(null,`${__dirname}/public/image`)
+    cb(null,`${__dirname}/public/${file.fieldname}`)
     },
     filename: function (req, file, cb) {
       function getFileExtension1(filename) {
@@ -51,12 +51,15 @@ app.post('/posts', authenticate, upload.single('postImg'), (req, res) => {
   var postImgPath = req.file.destination.match(pathRegexp)+'/'+req.file.filename
   var userNickname = req.user.userNickname
   var userImg = req.user.userImg
+  var dateNow = new Date();
+  console.log(dateNow);
   var post = new Post({
     _created: req.user._id,
     postTitle,
     postImg: postImgPath,
     userNickname,
-    userImg
+    userImg,
+    _creatDate: dateNow
   });
   post.save().then((post) => {
     res.send(post);
@@ -66,7 +69,7 @@ app.post('/posts', authenticate, upload.single('postImg'), (req, res) => {
 });
 //拿全部文章
 app.get('/getAllPosts', authenticate, (req, res) => {
-  Post.find().then(posts => {
+  Post.find().sort({'_id': -1}).then(posts => {
     res.send(posts)
   }).catch(e => {
     res.status(400).send(e)
@@ -79,8 +82,9 @@ app.post('/sendMessage', authenticate, (req, res) => {
   var userNickname = req.user.userNickname
   var message = req.body.message;
   var userImg = req.user.userImg;
+  var _sendDate = new Date();
   Post.findOne({_id}).then((post) => {
-    return post.sendMessage({email,userNickname,message,userImg});
+    return post.sendMessage({email,userNickname,message,userImg,_sendDate});
   }).then((post) => {
     res.send(post);
   }).catch((e) => {
@@ -91,7 +95,7 @@ app.post('/sendMessage', authenticate, (req, res) => {
 //我的貼文
 app.get('/myPosts', authenticate, (req, res) => {
   var _created = req.user._id;
-  Post.find({_created}).then(data => {
+  Post.find({_created}).sort({'_id': -1}).then(data => {
     res.send(data)
   }).catch((e) => {
     res.status(400).send(e)
@@ -99,8 +103,12 @@ app.get('/myPosts', authenticate, (req, res) => {
 })
 
 //註冊會員
-app.post('/users', (req, res) => {
-  var body = _.pick(req.body, ['email', 'password','userNickname']);
+app.post('/users', upload.single('userImg'), (req, res) => {
+  var userData = JSON.parse(req.body.userData)
+  var body = _.pick(userData, ['email', 'password','userNickname']);
+  var pathRegexp = new RegExp("\/.*");
+  var userImgPath = req.file.destination.match(pathRegexp)+'/'+req.file.filename
+  body.userImg = userImgPath
   var user = new User(body);
   //User.findByToken
   //User.generateAuthToken
@@ -110,7 +118,7 @@ app.post('/users', (req, res) => {
   }).then((token)=>{
     res.header('x-auth', token).send(user);
   }).catch((e) => {
-    console.log(e.errors['password'].message)
+    // console.log(e.errors['password'].message)
     res.status(400).send(e.errors['password'].message);
   })
 });
@@ -118,13 +126,13 @@ app.post('/users', (req, res) => {
 //登入會員
 app.post('/user/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
-  // console.log(body);
+  console.log(body);
   User.findByCredentials(body.email, body.password).then((user) => {
       return user.generateAuthToken().then((token) => {
         res.header('x-auth', token).send(user);
       }).catch((e) => {
         res.status(400),send();
-        console.log(e)
+        // console.log(e)
       });
   });
 });

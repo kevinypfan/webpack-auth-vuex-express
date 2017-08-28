@@ -17,7 +17,7 @@
         <input type="Nickname" class="form-control" id="exampleInputNickname1" placeholder="Nickname" v-model="nickname">
       </div>
       <div class="form-group">
-        <VueImgInputer v-model="picValue" theme="light" size="small"></VueImgInputer>
+        <VueImgInputer v-model="picValue" theme="light" size="small" maxSize="10240"  placeholder="點擊或拖曳圖片選擇" bottomText="點擊或拖曳以修改"></VueImgInputer>
       </div>
 
       <button type="submit" class="btn btn-default">Submit</button>
@@ -43,7 +43,16 @@ export default {
   },
   methods: {
     onSignup () {
-      this.$store.dispatch('signUserUp', {email: this.email, password: this.password, userNickname: this.nickname})
+      var userData = {
+        email: this.email,
+        password: this.password,
+        userNickname: this.nickname
+      }
+      var userDataStr = JSON.stringify(userData)
+      var formData = new FormData()
+      formData.append('userData', userDataStr)
+      formData.append('userImg', this.picValue)
+      this.$store.dispatch('signUserUp', formData)
     }
   },
   watch:{

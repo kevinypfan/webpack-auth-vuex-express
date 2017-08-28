@@ -21,6 +21,10 @@ export default{
 </script>
 
 <style>
+  @import url(//fonts.googleapis.com/earlyaccess/notosanstc.css);
+  * {
+    font-family: "Noto Sans TC", sans-serif;
+  }
   .container {
     width: 600px;
   }
