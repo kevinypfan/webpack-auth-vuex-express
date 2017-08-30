@@ -14,24 +14,36 @@
       <div class="msgImg" :style="{'background-image':' url('+m.userImg+')'}"></div>
       <div class="message">
         <div class="msgName">{{m.userNickname}}
-          <p>40分鐘前</p>
+          <p>{{m._sendDate}}</p>
         </div>
         <div class="msg">{{m.message}}</div>
       </div>
     </div>
+    <app-send-msg :post="post"></app-send-msg>
   </div>
 
 </template>
 
 <script>
+import SendMsg from '../personal/SendMsg.vue'
 export default {
   props: ['post'],
   computed: {
     timeStamp () {
       var date = new Date(this.post._creatDate)
-      var time = moment(date).format('M月D日 H:m');
+      var time = moment(date).format('M月D日 H: mm');
       return time
     }
+  },
+  components: {
+    appSendMsg: SendMsg
+  },
+  mounted () {
+      this.post.messages.map((m) => {
+        var date = new Date(m._sendDate)
+        m._sendDate = moment(date).format('M月D日 H: mm');
+        return m
+      })
   }
 }
 </script>
