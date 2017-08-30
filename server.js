@@ -15,7 +15,7 @@ mongoose.connect('mongodb://localhost:27017/UserTest', { useMongoClient: true })
 app.use(bodyParser.json());
 
 app.use(express.static(__dirname));
-//跨站無限制
+//跨站無限制d
 app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
