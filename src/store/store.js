@@ -37,7 +37,7 @@ export const store = new Vuex.Store({
             let token = res.headers.get('x-auth');
             localStorage.setItem('x-auth', token);
           },(error)=>{
-
+            localStorage.removeItem('x-auth');
           })
         },
         userLogout ({commit},payload) {
@@ -54,6 +54,7 @@ export const store = new Vuex.Store({
               commit('setUser', res.body);
               resolve();
             }).catch(()=>{
+              localStorage.removeItem('x-auth');
               reject();
             })
           })

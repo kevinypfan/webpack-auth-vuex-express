@@ -1,8 +1,10 @@
 <template>
   <div>
-    <h1>Home Page</h1>
+    <!-- <h1>Home Page</h1> -->
     <!-- <h1 v-if="">{{user.email}}</h1> -->
-    <pre>{{user}}</pre>
+    <!-- <img src="/public/image/logo.png" alt="">
+    <pre>{{user}}</pre> -->
+    <router-view></router-view>
   </div>
 
 </template>
@@ -17,7 +19,7 @@ export default {
   computed: {
     user () {
       return this.$store.getters.getUser
-    },
+    }
     // userIsAuthenticated () {
     //     return this.$store.getters.userIsAuthenticated
     // }
@@ -43,4 +45,8 @@ export default {
 </script>
 
 <style>
+  img {
+    height: 300px;
+    width: 300px;
+  }
 </style>

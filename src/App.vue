@@ -4,8 +4,11 @@
         <div class="container">
             <router-view></router-view>
         </div>
+        <div class="lastspace">
+
+        </div>
     </div>
-    
+
 </template>
 
 <script>
@@ -13,10 +16,19 @@
 export default{
     components:{
         appHeader: Header
-    } 
+    }
 }
 </script>
 
 <style>
-
+  @import url(//fonts.googleapis.com/earlyaccess/notosanstc.css);
+  * {
+    font-family: "Noto Sans TC", sans-serif;
+  }
+  .container {
+    width: 600px;
+  }
+  .lastspace {
+    height: 150px;
+  }
 </style>

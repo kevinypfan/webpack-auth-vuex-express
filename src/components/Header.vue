@@ -10,7 +10,7 @@
         <span class="icon-bar"></span>
       </button>
       <router-link to="/">
-          <a class="navbar-brand" href="#">Brand</a>
+          <a class="navbar-brand" href="#">Home</a>
       </router-link>
     </div>
 
@@ -41,9 +41,9 @@ export default {
         {title: 'Signup', link: '/signup'}];
       if (this.userIsAuthenticated) {
         menuItems = [
-          {title: 'Posts', link: '/posts'},
           {title: 'Chat', link: '/chat'},
-          {title: 'Profile', link: '/profile'},
+          {title: 'Personal', link: '/personal'},
+          {title: 'New Post', link: '/newpost'},
           {title: 'Logout', link: '/logout'}
         ]
       }
